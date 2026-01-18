@@ -28,34 +28,15 @@ const Secslide = () => {
         const textureLoader = new THREE.TextureLoader();
 
         // Mars material
-        const marsMaterial = new THREE.MeshStandardMaterial({ 
-            color: 0xcd5c5c  // Fallback color
-        });
+       
 
-        const marsTexture = textureLoader.load(
-            'https://planetary.s3.amazonaws.com/web/assets/pictures/20161110_march2016_wholemap_equi.jpg',
-            // onLoad
-            function(texture) {
-                console.log('Mars texture loaded successfully');
-                marsMaterial.map = texture;
-                marsMaterial.needsUpdate = true;
-            },
-            // onProgress
-            undefined,
-            // onError
-            function(err) {
-                console.error('Failed to load Mars texture:', err);
-            }
-        );
+      
 
-        const box1 = new THREE.Mesh( 
-            new THREE.SphereGeometry(0.5, 64, 64),
-            marsMaterial
-        );
+     
 
         // Earth
         const box2 = new THREE.Mesh( 
-            new THREE.SphereGeometry(2, 64, 64),
+            new THREE.SphereGeometry(2, 32, 64),
             new THREE.MeshStandardMaterial({ 
                 map: textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_atmos_2048.jpg'),
             }),
@@ -63,20 +44,12 @@ const Secslide = () => {
         scene.add(box2);
 
         // Moon
-        const box3 = new THREE.Mesh( 
-            new THREE.SphereGeometry(1, 64, 64),
-            new THREE.MeshStandardMaterial({ 
-                map: textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/moon_1024.jpg'),
-            }),
-        );
+      
 
-        // group.add(box1);
-        // group.add(box3);
-        box1.position.x = -5;
-        box3.position.x = 5;
         // box2.position.y = 10;
-        // box2.position.x = 0;
+        // box2.position.x = 40;
         // box2.position.z = -10;
+        box2.lookAt(new THREE.Vector3(0, 0, 0));
         scene.add(group);
 
         // Add lighting
@@ -94,7 +67,9 @@ const Secslide = () => {
         const ratio = width / height;
 
         const camera = new THREE.PerspectiveCamera(75, ratio, 0.1, 1000);
-        camera.position.z = 20;
+        camera.position.z = 10;
+        camera.position.y = 0;
+            camera.position.x = 0;
         scene.add(camera);
 
         // Renderer
@@ -115,13 +90,12 @@ const Secslide = () => {
             animationFrameId = requestAnimationFrame(animate);
             
             box2.rotation.y = elapsedTime;
-            box3.rotation.y = 0.1 * elapsedTime;
-            box1.rotation.y = 1.5 * elapsedTime;
+           
             group.rotation.y = 0.4 * elapsedTime;
 
-            camera.position.x = cursor.x * 20;
-            camera.position.z = Math.cos(cursor.y * 3) * 3;
-            camera.position.y = cursor.y * 6;
+            // camera.position.x = cursor.x * 20;
+            // camera.position.z = Math.cos(cursor.y * 3) * 3;
+            // camera.position.y = cursor.y * 6;
             camera.lookAt(box2.position);
 
             renderer.render(scene, camera);
@@ -150,10 +124,9 @@ const Secslide = () => {
             window.removeEventListener('resize', handleResize);
             cancelAnimationFrame(animationFrameId);
             renderer.dispose();
-            marsMaterial.dispose();
-            box1.geometry.dispose();
+           
             box2.geometry.dispose();
-            box3.geometry.dispose();
+            // box3.geometry.dispose();
         };
     }, []);
 

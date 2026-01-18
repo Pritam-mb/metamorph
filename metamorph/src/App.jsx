@@ -41,55 +41,36 @@ function App() {
   }, []);
 
   return (
-    <>
-      <div className='relative ' 
-      style={{
-        border: "2px solid red"
-      }}>
+    <div className='w-full'>
+      {/* First slide with galaxy background */}
+      <div className='relative w-full h-screen overflow-hidden'>
         <GalaxyBackground />
-        <div className='relative pointer-events-none' style={{ zIndex: 10 }}>
+        <div className='relative w-full h-full flex flex-col' style={{ zIndex: 10 }}>
           <div className='pointer-events-auto sticky top-0 z-50'>
             <Navbar />
           </div>
-          <div className='flex flex-col gap-20 justify-center items-center p-20 pointer-events-auto'>
+          <div className='flex-1 flex flex-col justify-center items-center pointer-events-auto'>
             <Hero />
           </div>
+          <div className='pointer-events-auto pb-10'>
             <Brand />
-          
-          {/* Slide 2 */}
-          <div className='relative min-h-screen flex flex-col justify-center items-center pointer-events-auto py-20'
-          style={{
-            // border: "2px solid blue"
-          }}>
-            {/* Secslide as background */}
-            <div className='absolute inset-0 w-full h-full'>
-              <Secslide/>
-            </div>
-            
-            {/* Content on top */}
-            <div className='relative z-10 w-full max-w-7xl'>
-              <h2 className='text-7xl font-bold text-white mb-8'>Slide 2 Title</h2>
-              <p className='text-3xl text-gray-200 mb-16'>This is your second slide with galaxy background</p>
-              <div className='grid grid-cols-3 gap-8'>
-                <div className='bg-white/20 backdrop-blur-md p-10 rounded-xl border border-white/30'>
-                  <h3 className='text-3xl font-bold text-white mb-4'>Card 1</h3>
-                  <p className='text-xl text-gray-200'>Content here</p>
-                </div>
-                <div className='bg-white/20 backdrop-blur-md p-10 rounded-xl border border-white/30'>
-                  <h3 className='text-3xl font-bold text-white mb-4'>Card 2</h3>
-                  <p className='text-xl text-gray-200'>Content here</p>
-                </div>
-                <div className='bg-white/20 backdrop-blur-md p-10 rounded-xl border border-white/30'>
-                  <h3 className='text-3xl font-bold text-white mb-4'>Card 3</h3>
-                  <p className='text-xl text-gray-200'>Content here</p>
-                </div>
-              </div>
-            </div>
           </div>
-      </div>
         </div>
-
-    </>
+      </div>
+      
+      {/* Slide 2 - overlaps on scroll */}
+      <div className='relative w-full min-h-screen flex flex-col justify-center items-center bg-black'>
+        {/* Secslide as background */}
+        <div className='absolute inset-0 w-full h-full'>
+          <Secslide/>
+        </div>
+        
+        {/* Content on top - add your content here with relative z-10 */}
+        <div className='relative z-10 pointer-events-auto'>
+          {/* Your slide 2 content goes here */}
+        </div>
+      </div>
+    </div>
   )
 }
 

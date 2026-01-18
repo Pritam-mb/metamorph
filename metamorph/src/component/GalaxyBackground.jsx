@@ -256,13 +256,13 @@ const GalaxyBackground = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="webgl fixed top-0 left-0 w-full h-full bg-black"
+      className="webgl absolute top-0 left-0 w-full h-full bg-black"
       style={{ 
-        position: 'fixed',
+        position: 'absolute',
         top: 0,
         left: 0,
-        width: '100vw',
-        height: '100vh',
+        width: '100%',
+        height: '100%',
         zIndex: 1
       }}
     />
