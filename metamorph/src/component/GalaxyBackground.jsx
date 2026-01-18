@@ -108,51 +108,6 @@ const GalaxyBackground = () => {
     gui.addColor(guipops, 'insideColor').onChange(galaxy2);
     gui.addColor(guipops, 'outsideColor').onChange(galaxy2);
     
-    // Galaxy parameters for second set of particles
-    guipops.count = 5000;
-    guipops.size = 5;
-    let particlematerial = null;
-    let particles = null;
-    let particlegeometry = null;
-    
-    const galaxy = () => {
-      if (particles !== null) {
-        particlegeometry.dispose();
-        particlematerial.dispose();
-        scene.remove(particles);
-      }
-      
-      particlegeometry = new THREE.BufferGeometry();
-      const positions = new Float32Array(guipops.count * 3);
-      
-      for (let i = 0; i < guipops.count; i++) {
-        const i3 = i * 3;
-        positions[i3 + 0] = (Math.random() - 0.5) * 30;
-        positions[i3 + 1] = (Math.random() - 0.5) * 30;
-        positions[i3 + 2] = (Math.random() - 0.5) * 30;
-      }
-      
-      particlegeometry.setAttribute(
-        'position',
-        new THREE.BufferAttribute(positions, 3)
-      );
-      
-      particlematerial = new THREE.PointsMaterial({
-        size: guipops.size,
-        sizeAttenuation: true,
-      });
-      
-      particles = new THREE.Points(particlegeometry, particlematerial);
-      scene.add(particles);
-    };
-    
-    galaxy();
-    
-    gui.add(guipops, 'count').min(100).max(10000).step(100).onFinishChange(galaxy);
-    gui.add(guipops, 'size').min(0.001).max(0.1).step(0.001).onChange(() => {
-      particlematerial.size = guipops.size;
-    });
-    
     // Sizes
     const sizes = {
       width: window.innerWidth,
@@ -197,11 +152,12 @@ const GalaxyBackground = () => {
     };
     canvas.addEventListener('wheel', preventWheel, { passive: false });
     
-    // Renderer
+    // Renderer with transparency
     const renderer = new THREE.WebGLRenderer({
       canvas: canvas,
       alpha: true, // Enable transparency
     });
+    renderer.setClearColor(0x000000, 0); // Transparent background
     renderer.setSize(sizes.width, sizes.height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     
@@ -211,13 +167,7 @@ const GalaxyBackground = () => {
     const tick = () => {
       const elapsedTime = clock.getElapsedTime();
       
-      // Animate particle size (pulsing effect)
-      if (particlematerial) {
-        particlematerial.size = Math.abs(Math.sin(elapsedTime)) * 0.0047 + 0.008;
-      }
-      
-      // Rotate particles
-      if (particles) particles.rotation.y = elapsedTime * 0.1;
+      // Rotate spiral galaxy
       if (particles2) particles2.rotation.y = elapsedTime * 0.1;
       
       // Update controls
@@ -238,8 +188,6 @@ const GalaxyBackground = () => {
       canvas.removeEventListener('wheel', preventWheel);
       
       // Dispose geometries and materials
-      if (particlegeometry) particlegeometry.dispose();
-      if (particlematerial) particlematerial.dispose();
       if (particlegeometry2) particlegeometry2.dispose();
       if (particlematerial2) particlematerial2.dispose();
       
@@ -256,14 +204,15 @@ const GalaxyBackground = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="webgl absolute top-0 left-0 w-full h-full bg-black"
+      className="webgl absolute top-0 left-0 w-full h-full"
       style={{ 
         position: 'absolute',
         top: 0,
         left: 0,
         width: '100%',
         height: '100%',
-        zIndex: 1
+        zIndex: 1,
+        pointerEvents: 'none'
       }}
     />
   );

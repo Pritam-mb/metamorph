@@ -1,73 +1,110 @@
 import { useState, useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import Navbar from './component/navbar'
+import StarBackground from './component/StarBackground'
 import GalaxyBackground from './component/GalaxyBackground'
-// import PlanetBackground from './component/PlanetBackground'
 import Hero from './component/Hero'
 import Brand from './component/Brand'
 import Secslide from './component/Secslide'
 gsap.registerPlugin(ScrollTrigger)
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [showPlanet, setShowPlanet] = useState(false)
-  const galaxyRef = useRef(null)
-  const planetRef = useRef(null)
+  const secSlideRef = useRef(null)
+  const earthContainerRef = useRef(null)
 
-  // Detect scroll to switch backgrounds with GSAP
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      const windowHeight = window.innerHeight;
-
-      // Switch to planet when scrolled past first section
-      if (scrollPosition > windowHeight * 0.8) {
-        if (!showPlanet) {
-          setShowPlanet(true);
+    // Animate Earth on scroll - starts zoomed in showing top half, then zooms out and moves right
+    if (earthContainerRef.current && secSlideRef.current) {
+      gsap.fromTo(
+        earthContainerRef.current,
+        {
+          x: '0%',
+          y: '20%',
+          scale: 5,
+          opacity: 1
+        },
+        {
+          x: '25%',
+          y: '0%',
+          scale: 1,
+          opacity: 1,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: secSlideRef.current,
+            start: 'top 100%',
+            end: 'center center',
+            scrub: 1.5,
+            markers: true
+          }
         }
-      } else {
-        if (showPlanet) {
-          setShowPlanet(false);
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+      )
+    }
+  }, [])
 
   return (
-    <div className='w-full'>
-      {/* First slide with galaxy background */}
-      <div className='relative w-full h-screen overflow-hidden'>
-        <GalaxyBackground />
-        <div className='relative w-full h-full flex flex-col' style={{ zIndex: 10 }}>
-          <div className='pointer-events-auto sticky top-0 z-50'>
-            <Navbar />
+    <div className='relative min-h-screen'>
+      {/* Fixed star background for all slides */}
+      <div className='fixed inset-0 w-full h-full' style={{ zIndex: 0 }}>
+        <StarBackground />
+      </div>
+      
+      {/* Scrollable content with transparent backgrounds */}
+      <div className='relative' style={{ zIndex: 1 }}>
+        {/* Navbar - sticky across all slides */}
+        <div className='pointer-events-auto sticky top-0 z-50'>
+          <Navbar />
+        </div>
+        
+        {/* First slide - Hero with galaxy */}
+        <div className='relative min-h-screen flex flex-col justify-center items-center pointer-events-none'>
+          {/* Galaxy only on first slide */}
+          <div className='absolute inset-0 w-full h-full' style={{ zIndex: 1 }}>
+            <GalaxyBackground />
           </div>
-          <div className='flex-1 flex flex-col justify-center items-center pointer-events-auto'>
+          
+          {/* Content on top of galaxy */}
+          <div className='relative pointer-events-auto' style={{ zIndex: 2 }}>
             <Hero />
           </div>
-          <div className='pointer-events-auto pb-10'>
+          <div className='relative pointer-events-auto' style={{ zIndex: 2 }}>
             <Brand />
           </div>
         </div>
-      </div>
-      
-      {/* Slide 2 - overlaps on scroll */}
-      <div className='relative w-full min-h-screen flex flex-col justify-center items-center bg-black'>
-        {/* Secslide as background */}
-        <div className='absolute inset-0 w-full h-full'>
-          <Secslide/>
-        </div>
         
-        {/* Content on top - add your content here with relative z-10 */}
-        <div className='relative z-10 pointer-events-auto'>
-          {/* Your slide 2 content goes here */}
+        {/* Spacer between slides */}
+        <div className='h-96'></div>
+        
+        {/* Slide 2 - Earth slide (no galaxy, just stars) */}
+        <div 
+          ref={secSlideRef}
+          className='relative min-h-screen flex items-center justify-start'
+          style={{ overflow: 'visible' }}
+        >
+          {/* Earth container with animation */}
+          <div 
+            ref={earthContainerRef}
+            className='absolute inset-0 w-full h-full'
+            style={{
+              transformOrigin: 'center center'
+            }}
+          >
+            <Secslide/>
+          </div>
+          
+          {/* Content on left side */}
+          <div className='relative z-10 pointer-events-auto max-w-2xl p-12 ml-12'>
+            <h2 className='text-5xl md:text-6xl font-bold text-white mb-6'>
+              Welcome To<br />The New World
+            </h2>
+            <p className='text-xl text-gray-300 mb-8'>
+              AI agents that actually bring value to businesses and elevate workers productivity.
+            </p>
+            <button className='px-8 py-3 bg-white text-black rounded-lg font-semibold hover:bg-gray-200 transition-colors'>
+              Get started.
+            </button>
+          </div>
         </div>
       </div>
     </div>

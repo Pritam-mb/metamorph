@@ -69,7 +69,7 @@ function Hero() {
                         style={{
                             height: "auto",
                             width: "100%",
-                            maxWidth: "600px",
+                            maxWidth: "400px",
                             filter: 'drop-shadow(0 0 30px rgba(139, 92, 246, 0.5))'
                         }} 
                     />
@@ -110,22 +110,8 @@ function Hero() {
                 </div>
 
                 {/* Scroll indicator */}
-                <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-                    <div className="flex flex-col items-center gap-2">
-                        <span className="text-gray-400 text-sm tracking-widest uppercase">Scroll</span>
-                        <svg 
-                            className="w-6 h-6 text-indigo-400" 
-                            fill="none" 
-                            strokeLinecap="round" 
-                            strokeLinejoin="round" 
-                            strokeWidth="2" 
-                            viewBox="0 0 24 24" 
-                            stroke="currentColor"
-                        >
-                            <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-                        </svg>
-                    </div>
-                </div>
+            
+                
             </div>
         </div>
     );

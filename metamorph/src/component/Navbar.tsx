@@ -1,17 +1,23 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import InteractiveHoverButton from './InteractiveHoverButton'
 import { gsap } from 'gsap'
+
 function Navbar() {
-    const tl = gsap.timeline();
-    tl.fromTo(
-      '.navbar',
-      { y: -100, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1 }
-    );
+    const navRef = useRef(null);
+
+    useEffect(() => {
+      if (navRef.current) {
+        gsap.fromTo(
+          navRef.current,
+          { y: -100, opacity: 0 },
+          { y: 0, opacity: 1, duration: 1 }
+        );
+      }
+    }, []);
 
   return (
-    <nav className='sticky top-0 z-50 w-full bg-transparent  ' style={{
+    <nav ref={navRef} className='sticky top-0 z-50 w-full bg-transparent  ' style={{
         // border: "2px solid red",
         // borderRadius: "10px"
 

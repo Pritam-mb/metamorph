@@ -27,7 +27,7 @@ function Brand() {
   }, [])
 
   return (
-    <div ref={brandRef} className='w-full py-10 pointer-events-auto'>
+    <div ref={brandRef} className='w-full py-10 pointer-events-auto background-col-black'>
       <div className='marquee-container'>
         <div className="marquee-content">
             <span className='brand-item'>NVIDIA</span>
